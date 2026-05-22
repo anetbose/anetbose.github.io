@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ananya Bose</title>
+  <meta name="description" content="Ananya Bose, Computer Science at York University's Lassonde School of Engineering. CORDA Democracy Fellow, MARS Fellow. Research in AI safety and governance." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Palette ─────────────────────────────────── */
+    :root {
+      --linen:        #F2EEE6;
+      --moss-green:   #5F7466;
+      --glacier-blue: #7FA9BC;
+      --deep-fjord:   #2B4656;
+      --stone:        #A7B1AE;
+      --snow:         #FBFCF9;
+      --charcoal:     #1F2528;
+      --border:       rgba(167,177,174,.22);
+      --border-h:     rgba(167,177,174,.52);
+      --card-bg:      var(--snow);
+      --card-glow:    rgba(95,116,102,.08);
+    }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      background: var(--linen);
+      color: var(--charcoal);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width:3px; }
+    ::-webkit-scrollbar-track { background:var(--linen); }
+    ::-webkit-scrollbar-thumb { background:var(--moss-green); border-radius:2px; }
+
+    /* ─── Nav ─────────────────────────────────────── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:22px 64px;
+      transition:padding .35s, background .35s, border-color .35s;
+    }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:1.1rem; letter-spacing:.06em; color:var(--linen); text-decoration:none; transition:color .3s; }
+    .nav-logo span { color:var(--glacier-blue); }
+    .nav-links { list-style:none; display:flex; gap:32px; }
+    .nav-links a { color:rgba(242,238,230,.65); text-decoration:none; font-size:.78rem; letter-spacing:.12em; text-transform:uppercase; transition:color .2s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--moss-green); transition:width .2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--glacier-blue); }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+
+    nav.light { padding:14px 64px; background:rgba(242,238,230,.92); backdrop-filter:blur(22px); border-bottom:1px solid var(--border); }
+    nav.light .nav-logo { color:var(--charcoal); }
+    nav.light .nav-links a { color:var(--stone); }
+    nav.light .nav-links a:hover, nav.light .nav-links a.active { color:var(--moss-green); }
+
+    /* ─── Hero ────────────────────────────────────── */
+    #hero { position:relative; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; background:var(--deep-fjord); }
+    #hero-canvas  { position:absolute; inset:0; width:100%; height:100%; }
+    #particle-field { position:absolute; inset:0; overflow:hidden; }
+
+    .particle { position:absolute; border-radius:50%; animation:float-p var(--dur,5s) var(--delay,0s) ease-in-out infinite; }
+    @keyframes float-p { 0%,100%{opacity:var(--lo,.04);transform:translateY(0)} 50%{opacity:var(--hi,.4);transform:translateY(var(--rise,-8px))} }
+
+    .hero-inner { position:relative; z-index:2; text-align:center; max-width:860px; padding:0 40px; }
+
+    .hero-name {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(3rem,6.5vw,5.5rem);
+      font-weight:600; line-height:.95; letter-spacing:-.02em;
+      color:var(--linen);
+      opacity:0; animation:fade-in .9s .2s ease forwards;
+    }
+    .hero-name em { font-style:italic; color:var(--glacier-blue); }
+
+    .hero-sub {
+      margin-top:24px; font-size:1.05rem; color:rgba(242,238,230,.72);
+      font-weight:400; line-height:1.72; max-width:520px;
+      margin-left:auto; margin-right:auto;
+      opacity:0; animation:fade-in .8s .5s ease forwards;
+    }
+    .hero-sub strong { color:var(--linen); font-weight:500; }
+
+    .hero-cta {
+      margin-top:40px; display:flex; gap:16px; justify-content:center;
+      opacity:0; animation:fade-in .8s .7s ease forwards;
+    }
+    .btn { padding:11px 28px; font-size:.8rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; border-radius:2px; transition:all .2s; display:inline-block; }
+    .btn-g { background:var(--moss-green); color:var(--snow); }
+    .btn-g:hover { background:var(--deep-fjord); transform:translateY(-2px); }
+    .btn-o { border:1px solid rgba(127,169,188,.5); color:var(--glacier-blue); }
+    .btn-o:hover { border-color:var(--glacier-blue); color:var(--linen); transform:translateY(-2px); }
+
+    .scroll-cue { position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; opacity:0; animation:fade-in .7s 1s ease forwards; }
+    .scroll-cue span { font-family:'JetBrains Mono',monospace; font-size:.6rem; color:rgba(242,238,230,.35); letter-spacing:.22em; text-transform:uppercase; }
+    .scroll-line { width:1px; height:52px; background:linear-gradient(to bottom,var(--glacier-blue),transparent); animation:spulse 2.4s ease-in-out infinite; }
+    @keyframes spulse { 0%,100%{opacity:.28} 50%{opacity:.9} }
+
+    @keyframes fade-in { from{opacity:0} to{opacity:1} }
+
+    /* ─── Section base ────────────────────────────── */
+    .sec { padding:108px 64px; max-width:1200px; margin:0 auto; }
+    .sec-alt { background:var(--snow); }
+    .sec-alt > .sec { max-width:1200px; }
+    .sec-inner { padding:0 64px; max-width:1200px; margin:0 auto; }
+    .sec-divider { border:none; border-top:1px solid var(--border); }
+
+    .sec-hd { margin-bottom:56px; }
+    .sec-lbl { font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--moss-green); letter-spacing:.28em; text-transform:uppercase; margin-bottom:12px; }
+    .sec-ttl { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:400; color:var(--charcoal); line-height:1.1; }
+    .sec-ttl em { font-style:italic; color:var(--deep-fjord); }
+
+    /* ─── Reveal ──────────────────────────────────── */
+    .rv { opacity:0; transform:translateY(28px); transition:opacity .65s ease,transform .65s ease; }
+    .rv.in { opacity:1; transform:none; }
+    .rv.d1 { transition-delay:.08s; }
+    .rv.d2 { transition-delay:.16s; }
+    .rv.d3 { transition-delay:.24s; }
+    .rv.d4 { transition-delay:.32s; }
+
+    /* ─── About ───────────────────────────────────── */
+    #about { border-top:1px solid var(--border); }
+    .about-layout { display:grid; grid-template-columns:1fr 280px; gap:64px; align-items:start; }
+    .bio p { font-size:1.02rem; line-height:1.84; color:var(--charcoal); margin-bottom:16px; }
+    .bio p:last-child { margin-bottom:0; }
+    .about-photo { position:sticky; top:120px; }
+    .about-photo img { width:100%; border-radius:2px; border:1px solid var(--border); display:block; }
+    @media(max-width:900px){ .about-layout { grid-template-columns:1fr; } .about-photo { display:none; } }
+
+    /* ─── Cards ───────────────────────────────────── */
+    .card {
+      background:var(--card-bg); border:1px solid var(--border); border-radius:2px;
+      padding:36px; transition:all .3s; position:relative; overflow:hidden;
+    }
+    .card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,var(--moss-green),var(--glacier-blue));
+      transform:scaleX(0); transform-origin:left; transition:transform .3s;
+    }
+    .card:hover::before { transform:scaleX(1); }
+    .card:hover { border-color:var(--border-h); transform:translateY(-4px); box-shadow:0 14px 40px var(--card-glow); }
+
+    .card-lbl { font-family:'JetBrains Mono',monospace; font-size:.67rem; color:var(--moss-green); letter-spacing:.24em; text-transform:uppercase; margin-bottom:12px; }
+    .card-ttl { font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--charcoal); line-height:1.3; margin-bottom:5px; }
+    .card-org { font-size:.82rem; color:var(--glacier-blue); font-weight:500; margin-bottom:5px; }
+    .card-date { font-size:.75rem; color:var(--stone); margin-bottom:18px; }
+    .bullets { list-style:none; display:flex; flex-direction:column; gap:9px; }
+    .bullets li { font-size:.86rem; color:var(--stone); line-height:1.55; padding-left:18px; position:relative; }
+    .bullets li::before { content:'›'; position:absolute; left:0; color:var(--moss-green); }
+
+    /* ─── Research ────────────────────────────────── */
+    .r-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+
+    /* ─── Papers ──────────────────────────────────── */
+    #papers { border-top:1px solid var(--border); }
+    .paper { background:var(--card-bg); border:1px solid var(--border); border-radius:2px; padding:36px; margin-bottom:18px; transition:border-color .25s; }
+    .paper:hover { border-color:var(--border-h); }
+    .paper-type { font-family:'JetBrains Mono',monospace; font-size:.67rem; color:var(--deep-fjord); letter-spacing:.24em; text-transform:uppercase; margin-bottom:10px; }
+    .paper-ttl { font-family:'Playfair Display',serif; font-size:1.18rem; color:var(--charcoal); line-height:1.38; margin-bottom:6px; }
+    .paper-meta { font-size:.76rem; color:var(--stone); margin-bottom:14px; }
+    .paper-abs { font-size:.87rem; color:var(--stone); line-height:1.70; }
+    .tags { margin-top:16px; display:flex; flex-wrap:wrap; gap:6px; }
+    .tag { padding:3px 10px; background:rgba(95,116,102,.08); border:1px solid rgba(95,116,102,.2); border-radius:2px; font-size:.68rem; color:var(--moss-green); font-family:'JetBrains Mono',monospace; }
+
+    /* ─── Projects ────────────────────────────────── */
+    .proj-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .proj-icon { width:42px; height:42px; border-radius:2px; background:rgba(127,169,188,.1); border:1px solid rgba(127,169,188,.25); display:flex; align-items:center; justify-content:center; font-size:1.2rem; margin-bottom:16px; }
+    .proj-ttl { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--charcoal); margin-bottom:6px; }
+    .proj-stack { font-family:'JetBrains Mono',monospace; font-size:.66rem; color:var(--glacier-blue); margin-bottom:12px; letter-spacing:.04em; }
+    .proj-desc { font-size:.84rem; color:var(--stone); line-height:1.60; }
+
+    /* ─── Debate ──────────────────────────────────── */
+    #debate { border-top:1px solid var(--border); }
+    .debate-grid { display:grid; grid-template-columns:1fr 1fr; gap:52px; }
+    .ach { border-left:2px solid var(--moss-green); padding-left:24px; margin-bottom:28px; }
+    .ach-ttl { font-family:'Playfair Display',serif; font-size:1.08rem; color:var(--charcoal); margin-bottom:3px; }
+    .ach-sub { font-size:.8rem; color:var(--glacier-blue); font-weight:500; margin-bottom:4px; }
+    .ach-date { font-size:.74rem; color:var(--stone); margin-bottom:9px; }
+    .ach-desc { font-size:.84rem; color:var(--stone); line-height:1.58; }
+
+    /* ─── Training ────────────────────────────────── */
+    .train-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .train-org { font-family:'JetBrains Mono',monospace; font-size:.67rem; color:var(--moss-green); letter-spacing:.2em; text-transform:uppercase; margin-bottom:9px; }
+    .train-ttl { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--charcoal); margin-bottom:5px; }
+    .train-date { font-size:.74rem; color:var(--stone); margin-bottom:12px; }
+    .train-li { list-style:none; }
+    .train-li li { font-size:.82rem; color:var(--stone); line-height:1.54; margin-bottom:6px; padding-left:13px; position:relative; }
+    .train-li li::before { content:'›'; position:absolute; left:0; color:var(--moss-green); }
+
+    /* ─── Contact ─────────────────────────────────── */
+    #contact { border-top:1px solid var(--border); text-align:center; }
+    .contact-wrap { max-width:520px; margin:0 auto; }
+    .contact-ttl { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,5vw,3.6rem); color:var(--charcoal); line-height:1.1; margin-bottom:16px; }
+    .contact-ttl em { font-style:italic; color:var(--deep-fjord); }
+    .contact-sub { font-size:.96rem; color:var(--stone); line-height:1.74; margin-bottom:40px; }
+    .contact-links { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+    .clink { display:flex; align-items:center; gap:7px; color:var(--stone); text-decoration:none; font-size:.85rem; padding:10px 20px; border:1px solid var(--border); border-radius:2px; transition:all .2s; }
+    .clink:hover { color:var(--moss-green); border-color:var(--moss-green); }
+
+    /* ─── Footer ──────────────────────────────────── */
+    .foot { background:var(--deep-fjord); padding:20px 64px; display:flex; justify-content:space-between; align-items:center; }
+    .foot-t { font-family:'JetBrains Mono',monospace; font-size:.72rem; color:rgba(242,238,230,.38); }
+    .foot-t a { color:var(--glacier-blue); text-decoration:none; }
+
+    /* ─── Responsive ──────────────────────────────── */
+    @media(max-width:900px){
+      nav,.foot { padding:18px 28px; }
+      nav.light { padding:12px 28px; }
+      .nav-links { display:none; }
+      .sec,.sec-inner { padding-left:28px; padding-right:28px; }
+      .about-grid,.r-grid,.debate-grid { grid-template-columns:1fr; gap:32px; }
+      .proj-grid,.train-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ──────────────────────────────────────── -->
+  <nav id="nav">
+    <a href="#hero" class="nav-logo">A<span>.</span>Bose</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#papers">Papers</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#debate">Debate</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ════ HERO ════════════════════════════════════ -->
+  <section id="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div id="particle-field"></div>
+
+    <div class="hero-inner">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(127,169,188,.7);margin-bottom:20px;opacity:0;animation:fade-in .7s .05s ease forwards;">Computer Science · Lassonde · York University</p>
+      <h1 class="hero-name">Ananya<br><em>Bose.</em></h1>
+      <p class="hero-sub">
+        Computer Science at Lassonde School of Engineering. I am interested in helping AI develop in ways that are safe and socially beneficial. My research focuses on AI safety and policy, particularly the governance of advanced compute, semiconductor export controls, and the institutions needed to oversee emerging systems.
+      </p>
+      <div class="hero-cta">
+        <a href="#research" class="btn btn-g">Research</a>
+        <a href="#contact" class="btn btn-o">Contact</a>
+      </div>
+    </div>
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ════ ABOUT ════════════════════════════════════ -->
+  <section id="about" class="sec">
+    <div class="sec-hd rv">
+      <div class="sec-lbl">About</div>
+      <h2 class="sec-ttl">Research &amp; <em>Background</em></h2>
+    </div>
+    <div class="bio rv d1">
+      <p>
+        I'm a CS student at York University's Lassonde School of Engineering, interested in AI safety and governance. I'm currently a CORDA Democracy Fellow under Aman Agarwal, building case studies of AI safety startups and examining how their practices reflect their stated roles in the ecosystem. Before that, I was a MARS Fellow at Cambridge AI Safety under Erich Grunewald, working on how agentic AI might shift the enforcement-circumvention balance in semiconductor export controls.
+      </p>
+      <p>
+        Outside research, I run, write short fiction, and think about geography more than is probably reasonable.
+      </p>
+    </div>
+  </section>
+
+  <!-- ════ RESEARCH ════════════════════════════════ -->
+  <div id="research" class="sec-alt">
+    <div class="sec sec-inner" style="padding-top:108px;padding-bottom:108px;">
+      <div class="sec-hd rv">
+        <div class="sec-lbl">Research Experience</div>
+        <h2 class="sec-ttl">Fellowships</h2>
+      </div>
+      <div class="r-grid">
+
+        <div class="card rv d1">
+          <div class="card-lbl">Current · AI Governance</div>
+          <h3 class="card-ttl">Cambridge AI Safety, MARS Program</h3>
+          <div class="card-org">Research Fellow · Mentored by Erich Grunewald</div>
+          <div class="card-date">Present</div>
+          <ul class="bullets">
+            <li>How near-term autonomous AI agents shift the offense–defense balance in semiconductor export enforcement</li>
+            <li>Analyzing U.S. Bureau of Industry and Security export control regimes under AI-assisted evasion scenarios</li>
+            <li>Identifying failure modes in KYC and end-use monitoring through adversarial AI modeling</li>
+            <li>Red-team and near-term forecasting of supply-chain dependencies relevant to frontier AI training</li>
+          </ul>
+        </div>
+
+        <div class="card rv d2">
+          <div class="card-lbl">Apr – Jun 2026 · Democracy &amp; AI</div>
+          <h3 class="card-ttl">CORDA Democracy Fellowship</h3>
+          <div class="card-org">Research Fellow · Mentored by Aman Agarwal</div>
+          <div class="card-date">"Securing Democracy by Design: Case Studies of AI Safety Startups"</div>
+          <ul class="bullets">
+            <li>Case studies of AI safety startups, examining how their practices reflect their stated roles in the ecosystem</li>
+            <li>Analyzing governance choices that reduce democratic-resilience risk from advanced AI</li>
+            <li>Structured profiles for funders and policymakers assessing democratic implications of early-stage ventures</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PAPERS ══════════════════════════════════ -->
+  <section id="papers" class="sec">
+    <div class="sec-hd rv">
+      <div class="sec-lbl">Working Papers</div>
+      <h2 class="sec-ttl">Papers</h2>
+      <p style="margin-top:14px;font-size:.85rem;color:var(--stone);line-height:1.6;">Both papers are working papers submitted to peer-review venues. They represent ongoing research and have not yet been through formal peer review.</p>
+    </div>
+
+    <div class="paper rv d1">
+      <div class="paper-type">Working Paper · February 2026</div>
+      <h3 class="paper-ttl">"Graph-Based Stackelberg Model for Adversarial Supply Chain Enforcement"</h3>
+      <div class="paper-meta">A. Bose · February 2026</div>
+      <p class="paper-abs">Formalizes semiconductor diversion as a Stackelberg security game on a directed supply-chain graph. An enforcement agency commits to a probabilistic inspection policy while an adversary adapts routing subject to capacity and budget constraints. The model yields tractable equilibria that inform risk-prioritized inspection allocation.</p>
+      <div class="tags">
+        <span class="tag">Game Theory</span>
+        <span class="tag">Supply Chain</span>
+        <span class="tag">Export Controls</span>
+        <span class="tag">Stackelberg</span>
+      </div>
+    </div>
+
+    <div class="paper rv d2">
+      <div class="paper-type">Working Paper · Under Review at ICML 2026</div>
+      <h3 class="paper-ttl">"Impact of Advanced AI Agents on the Enforcement-Circumvention Balance in Export Controls"</h3>
+      <div class="paper-meta">A. Bose · February 2026</div>
+      <p class="paper-abs">Analyzes how agentic AI capabilities expected to mature by 2027–2029 differentially affect enforcement and circumvention actors in semiconductor export controls. Proposes a capability taxonomy and scenario-based assessment framework for reasoning about how automation asymmetrically affects each side of the enforcement equation.</p>
+      <div class="tags">
+        <span class="tag">AI Agents</span>
+        <span class="tag">Export Controls</span>
+        <span class="tag">Forecasting</span>
+        <span class="tag">AI Governance</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ PROJECTS ════════════════════════════════ -->
+  <div id="projects" class="sec-alt">
+    <div class="sec sec-inner" style="padding-top:108px;padding-bottom:108px;">
+      <div class="sec-hd rv">
+        <div class="sec-lbl">Technical Projects</div>
+        <h2 class="sec-ttl">Projects</h2>
+      </div>
+      <div class="proj-grid">
+
+        <div class="card rv d1">
+          <div class="proj-icon">🚀</div>
+          <h3 class="proj-ttl">Falcon 9 Predictive Pipeline</h3>
+          <div class="proj-stack">Python · Scikit-learn · SQL · Plotly Dash</div>
+          <p class="proj-desc">ML pipeline predicting Falcon 9 landing outcomes. Custom SpaceX API ingest + BeautifulSoup scraper, SVM / decision tree / logistic regression benchmarked on held-out data, deployed as an interactive Plotly Dash dashboard.</p>
+        </div>
+
+        <div class="card rv d2">
+          <div class="proj-icon">📊</div>
+          <h3 class="proj-ttl">Chicago Urban Data Analysis</h3>
+          <div class="proj-stack">SQL · Pandas · Matplotlib</div>
+          <p class="proj-desc">Quantitative EDA on large-scale Chicago census, crime, and public-school datasets. Complex SQL joins across disparate sources, statistical visualizations surfacing socioeconomic–safety correlations.</p>
+        </div>
+
+        <div class="card rv d3">
+          <div class="proj-icon">🌿</div>
+          <h3 class="proj-ttl">CliMate: Behavioral Nudge Tool</h3>
+          <div class="proj-stack">Browser Extension · Behavioral Design · JS</div>
+          <p class="proj-desc">Browser extension nudging consumers away from fast-fashion purchases by surfacing environmental impact data at point of decision. Awarded 1st Place + $5,000 at a concept innovation stream.</p>
+        </div>
+
+      </div>
+
+      <!-- Technical toolkit — lives here, with the projects -->
+      <div style="margin-top:44px;" class="rv d4">
+        <div class="sec-lbl" style="margin-bottom:14px;">Technical Toolkit</div>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Java</span>
+          <span class="tag">PyTorch</span><span class="tag">Scikit-learn</span><span class="tag">Pandas</span>
+          <span class="tag">Matplotlib</span><span class="tag">BeautifulSoup</span><span class="tag">Tableau</span><span class="tag">Git</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ DEBATE ═══════════════════════════════════ -->
+  <section id="debate" class="sec">
+    <div class="sec-hd rv">
+      <div class="sec-lbl">Competitive Debate</div>
+      <h2 class="sec-ttl">Debate &amp; <em>Coaching</em></h2>
+    </div>
+    <div class="debate-grid">
+      <div>
+        <div class="ach rv d1">
+          <div class="ach-ttl">Central Canadian Debate Championships</div>
+          <div class="ach-sub">Open Champion · 1st Place</div>
+          <div class="ach-date">2024 &amp; 2025 · Toronto, ON</div>
+          <p class="ach-desc">Back-to-back Open Champion, ranked first among 100+ competitors each year. Evaluated complex policy motions under time pressure through structured analytical reasoning.</p>
+        </div>
+        <div class="ach rv d2">
+          <div class="ach-ttl">North American Womxn &amp; Gender Minorities (NAWGM)</div>
+          <div class="ach-sub">Open Finalist · Top 2</div>
+          <div class="ach-date">2024 · Continental</div>
+          <p class="ach-desc">Advanced to Grand Finals applying governance-oriented frameworks to international relations topics.</p>
+        </div>
+        <div class="ach rv d3">
+          <div class="ach-ttl">University of Waterloo Debating Society</div>
+          <div class="ach-sub">Tournament Director &amp; Executive</div>
+          <div class="ach-date">Oct 2022 – Apr 2025 · Waterloo, ON</div>
+          <p class="ach-desc">Directed large-scale inter-varsity tournaments. Managed logistics, budget, and adjudication compliance.</p>
+        </div>
+      </div>
+      <div>
+        <div class="card rv d2">
+          <div class="card-lbl">Derin Education · Oct 2023 – Apr 2025</div>
+          <h3 class="card-ttl">Curriculum Designer &amp; Debate Coach</h3>
+          <ul class="bullets">
+            <li>Designed workshops on international relations, economics, and technology policy for university-level debaters</li>
+            <li>Authored curriculum on stakeholder analysis, argument construction, and rebuttal strategy</li>
+            <li>Mentees saw increased break rates at regional and national tournaments</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ TRAINING ════════════════════════════════ -->
+  <div id="training" class="sec-alt">
+    <div class="sec sec-inner" style="padding-top:108px;padding-bottom:108px;">
+      <div class="sec-hd rv">
+        <div class="sec-lbl">Specialized Training</div>
+        <h2 class="sec-ttl">Credentials</h2>
+      </div>
+      <div class="train-grid">
+
+        <div class="card rv d1">
+          <div class="train-org">BlueDot Impact</div>
+          <h3 class="train-ttl">AGI Strategy Course</h3>
+          <div class="train-date">Completed April 2026</div>
+          <ul class="train-li">
+            <li>25-hour facilitated curriculum on AGI risk and intervention design</li>
+            <li>Incentive mapping, kill-chain analysis, and defense-in-depth frameworks</li>
+            <li>Race dynamics, threat modeling, and governance interventions across the transition to transformative AI</li>
+          </ul>
+        </div>
+
+        <div class="card rv d2">
+          <div class="train-org">Center for AI Safety</div>
+          <h3 class="train-ttl">AI Safety, Ethics &amp; Society</h3>
+          <div class="train-date">Completed February 2026 · Winter 2025–26 Cohort</div>
+          <ul class="train-li">
+            <li>Seminal literature on alignment, control, and societal impacts of AI deployment</li>
+            <li>Catastrophic risk mitigation and frontier-model governance</li>
+            <li>Technical discussions on mechanistic interpretability</li>
+          </ul>
+        </div>
+
+        <div class="card rv d3">
+          <div class="train-org">IBM &amp; Coursera</div>
+          <h3 class="train-ttl">Professional Certificates</h3>
+          <div class="train-date">2025</div>
+          <ul class="train-li">
+            <li>IBM Data Science Professional Certificate</li>
+            <li>Data Structures &amp; Algorithms (UC San Diego)</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ CONTACT ═════════════════════════════════ -->
+  <section id="contact" class="sec">
+    <div class="contact-wrap">
+      <div class="rv">
+        <div class="sec-lbl" style="text-align:center;margin-bottom:20px;">Get In Touch</div>
+        <h2 class="contact-ttl">Let's talk <em>ideas.</em></h2>
+        <p class="contact-sub">AI governance, export controls, democratic resilience, short fiction, or the finer points of a policy motion. My inbox is open.</p>
+        <div class="contact-links">
+          <a href="mailto:a25bose@my.yorku.ca" class="clink">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+            a25bose@my.yorku.ca
+          </a>
+          <a href="mailto:ananyabose4145@gmail.com" class="clink">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+            Personal
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────── -->
+  <footer class="foot">
+    <span class="foot-t">© 2026 Ananya Bose · Toronto, ON</span>
+    <span class="foot-t"><a href="https://yorku.ca" target="_blank">Lassonde · York University</a></span>
+  </footer>
+
+  <!-- ════════════════ SCRIPTS ═════════════════════ -->
+  <script>
+  (() => {
+
+    /* ── Nav ─────────────────────────────────────── */
+    const nav   = document.getElementById('nav');
+    const navAs = nav.querySelectorAll('.nav-links a');
+    const hero  = document.getElementById('hero');
+    const secs  = document.querySelectorAll('section[id],div[id]');
+
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('light', scrollY > hero.offsetHeight - 80);
+      let cur='';
+      secs.forEach(s => { if(scrollY >= s.offsetTop - 220) cur = s.id; });
+      navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href')==='#'+cur));
+    }, {passive:true});
+
+    /* ── Pollen particles ────────────────────────── */
+    const pf = document.getElementById('particle-field');
+    const pc = [
+      'rgba(127,169,188,V)', 'rgba(95,116,102,V)',
+      'rgba(242,238,230,V)', 'rgba(43,70,86,V)',
+    ];
+    for(let i=0;i<50;i++){
+      const el = document.createElement('div');
+      el.className='particle';
+      const sz=Math.random()*3+1;
+      const lo=(Math.random()*.06).toFixed(2);
+      const hi=(parseFloat(lo)+Math.random()*.38+.06).toFixed(2);
+      const rise=-(Math.random()*11+3);
+      const col=pc[Math.floor(Math.random()*pc.length)];
+      el.style.cssText=`
+        width:${sz}px;height:${sz}px;
+        left:${Math.random()*100}%;top:${Math.random()*100}%;
+        background:${col.replace('V','1')};
+        --dur:${(Math.random()*5+3).toFixed(1)}s;
+        --delay:${(Math.random()*9).toFixed(1)}s;
+        --lo:${lo};--hi:${hi};--rise:${rise}px;
+      `;
+      pf.appendChild(el);
+    }
+
+    /* ── WebGL gradient: fjord / alpine palette ───── */
+    const canvas = document.getElementById('hero-canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if(gl){
+      const vert = `attribute vec2 a; void main(){gl_Position=vec4(a,0.,1.);}`;
+      const frag = `
+        precision mediump float;
+        uniform float u_t; uniform vec2 u_r, u_m;
+
+        float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+        float sn(vec2 p){
+          vec2 i=floor(p),f=fract(p); f=f*f*(3.-2.*f);
+          return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);
+        }
+        float fbm(vec2 p){float v=0.,a=.5,fr=1.;for(int i=0;i<6;i++){v+=a*sn(p*fr);a*=.5;fr*=2.;}return v;}
+
+        void main(){
+          vec2 uv = gl_FragCoord.xy/u_r;
+          vec2 mu = u_m/u_r;
+          float t = u_t*.042;
+
+          vec2 p = uv*2.5-1.25;
+          p += .09*vec2(sin(t+p.y*1.05), cos(t*.68+p.x*.85));
+          vec2 dm = mu-uv; p += .05*dm/(length(dm)+.3);
+
+          float n = fbm(p+t*.16) + .2*fbm(p*1.8-t*.1);
+
+          vec3 fjord   = vec3(.169,.275,.337);
+          vec3 moss    = vec3(.373,.455,.400);
+          vec3 glacier = vec3(.498,.663,.737);
+          vec3 abyss   = vec3(.09,.15,.20);
+
+          vec3 col = mix(abyss, fjord, n);
+          col = mix(col, moss,    fbm(p*1.3+t*.055)*.52);
+          col = mix(col, abyss,   sn(p*2.4-t*.09)*.28);
+
+          float gl2 = fbm(p*2.6-t*.17+3.8);
+          col += .06*glacier*gl2*gl2;
+
+          col += .022*(1.-smoothstep(0.,.48,length(uv-.5)))*vec3(.949,.933,.902);
+
+          float vig = 1.-smoothstep(.16,1.6,length(uv-.5)*2.2);
+          col *= vig*.82+.18;
+
+          gl_FragColor = vec4(col,1.);
+        }
+      `;
+
+      function mk(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+      const prog=gl.createProgram();
+      gl.attachShader(prog,mk(gl.VERTEX_SHADER,vert));
+      gl.attachShader(prog,mk(gl.FRAGMENT_SHADER,frag));
+      gl.linkProgram(prog); gl.useProgram(prog);
+
+      const buf=gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+      gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+      const al=gl.getAttribLocation(prog,'a');
+      gl.enableVertexAttribArray(al); gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+
+      const uT=gl.getUniformLocation(prog,'u_t');
+      const uR=gl.getUniformLocation(prog,'u_r');
+      const uM=gl.getUniformLocation(prog,'u_m');
+      let gx=0,gy=0,tx2=0,ty2=0;
+      document.addEventListener('mousemove',e=>{tx2=e.clientX;ty2=canvas.height-e.clientY;});
+
+      function resize(){canvas.width=innerWidth;canvas.height=innerHeight;gl.viewport(0,0,canvas.width,canvas.height);}
+      window.addEventListener('resize',resize); resize();
+
+      const t0=Date.now();
+      (function frame(){
+        gx+=(tx2-gx)*.05; gy+=(ty2-gy)*.05;
+        gl.uniform1f(uT,(Date.now()-t0)/1000);
+        gl.uniform2f(uR,canvas.width,canvas.height);
+        gl.uniform2f(uM,gx,gy);
+        gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+        requestAnimationFrame(frame);
+      })();
+    }
+
+    /* ── Scroll reveal ───────────────────────────── */
+    const obs=new IntersectionObserver(es=>{
+      es.forEach(e=>{if(e.isIntersecting) e.target.classList.add('in');});
+    },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+  })();
+  </script>
+</body>
+</html>
